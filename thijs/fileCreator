@@ -1,0 +1,46 @@
+#!/bin/bash
+
+mkdir $1
+cd $1
+touch Makefile
+touch $1.c
+
+echo "PROGRAM=$1" >> Makefile
+echo 'LIBPYNQDIR=../libpynq_v2.2' >> Makefile
+echo 'PLATFORM=PYNQ' >> Makefile
+echo 'ifeq ($(PLATFORM),PYNQ)' >> Makefile
+echo '	CFLAGS=-Wall -Wno-format-security -g -I$(LIBPYNQDIR) -D$(PLATFORM)' >> Makefile
+echo '	LDFLAGS=-lm -lX11 -pthread' >> Makefile
+echo 'endif' >> Makefile
+echo "" >> Makefile
+echo 'LIBPYNQ=libpynq' >> Makefile
+echo "" >> Makefile
+echo 'all: $(PROGRAM)' >> Makefile
+echo "" >> Makefile
+echo 'run: $(PROGRAM)' >> Makefile
+echo '	-./$(PROGRAM) || true' >> Makefile
+echo "" >> Makefile
+echo '$(LIBPYNQ).o: $(LIBPYNQDIR)/$(LIBPYNQ).[ch]' >> Makefile
+echo '	gcc -c $(CFLAGS) $(LIBPYNQDIR)/$(LIBPYNQ).c' >> Makefile
+echo "" >> Makefile
+echo '$(PROGRAM): $(LIBPYNQ).o $(PROGRAM).c' >> Makefile
+echo '	gcc $(CFLAGS) -o $(PROGRAM) $(PROGRAM).c $(LIBPYNQ).o $(LDFLAGS) ' >> Makefile
+echo '' >> Makefile
+echo 'clean:' >> Makefile
+echo '	-rm -f $(PROGRAM) $(PROGRAM).o $(LIBPYNQ).o' >> Makefile
+echo '	-rm -rf $(PROGRAM).dSYM' >> Makefile
+
+echo '#include <stdio.h>' >> $1.c
+echo "" >> $1.c
+echo "int main(void) {" >> $1.c
+echo '	//Your code goes here' >> $1.c
+echo '	return 1;' >> $1.c
+echo '}' >> $1.c
+
+echo "Graag gedaan! Makefile en je C file zijn gegenereerd!"
+
+# Dit programma is gemaakt door Thijs Tops
+# Fontys hogenscholen Engineering
+# contact@thijstops.com
+
+
